@@ -36,37 +36,39 @@ public class AnimalCareSystem {
     }
 
     static int showMenu(Scanner sc){
-        int input;
-
-        System.out.println("=== 동물원 관리 시스템 ===");
+        System.out.println("=== 확장된 동물원 관리 시스템 ===");
         System.out.println("1. 동물 등록");
         System.out.println("2. 동물 목록 보기");
         System.out.println("3. 동물과 놀기");
         System.out.println("4. 먹이주기");
-        System.out.println("5. 동물 상태 확인");
-        System.out.println("6. 울음소리 듣기");
-        System.out.println("7. 종료");
+        System.out.println("5. 특별 능력 사용");
+        System.out.println("6. 사육사 관리");
+        System.out.println("7. 통계보기");
+        System.out.println("8. 종료");
+
+        return inputInt(sc, "메뉴를 선택하세요: ", 1, 8);
+    }
+
+    static int inputInt(Scanner sc, String message, int start, int end){
+        int input;
         while(true){
+            System.out.print(message);
             try{
-                System.out.print("메뉴를 선택하세요: ");
                 input = sc.nextInt();
-                if(!(1<=input&&input<=7)){
-                    throw new IllegalArgumentException("범위가 잘못 되었습니다. 다시 입력해주세요.");
+                if(input < start || input > end){
+                    throw new InputMismatchException("범위 내의 숫자를 입력해주세요.");
                 }
-                break;
+                return input;
             }catch (IllegalArgumentException e){
+                System.out.println("숫자를 입력해주세요.");
+                sc.nextLine();
+
+            }catch (InputMismatchException e){
                 System.out.println(e.getMessage());
                 sc.nextLine();
             }
-            catch (InputMismatchException e){
-                System.out.println("숫자가 아닙니다. 다시 입력해주세요.");
-                sc.nextLine();
-            }
         }
-
-        return input;
     }
-
 }
 
 
@@ -92,43 +94,21 @@ class Zoo{
     public void addAnimal(Scanner sc){
         System.out.print("동물 이름을 입력하세요: "); // 이름 입력
         String name = sc.next();
-        int age;
 
-        while(true){
-            System.out.print("동물 나이를 입력하세요: "); // 나이 입력
-            try{
-                age = sc.nextInt();
-                break;
-            }catch (InputMismatchException e){
-                System.out.println("숫자가 아닙니다. 다시 입력해주세요.");
-            }
+        int age = AnimalCareSystem.inputInt(sc, "동물 나이를 입력하세요: ", 1, 100);
+
+        int type = AnimalCareSystem.inputInt(sc, "동물 종류를 선택하세요 (1.강아지 2.고양이): ", 1, 2);
+
+        if(type == 1){
+            System.out.print(name + " (강아지, " + age + "살)가 등록되었습니다.");
+            Dog dog = new Dog(name, age, 0, 0);
+            animals.add(dog);
         }
-
-        while(true){
-            System.out.print("동물 종류를 선택하세요 (1.강아지 2.고양이): "); // 종류 입력
-            try{
-                int type = sc.nextInt();
-                if(type == 1){
-                    System.out.print(name + "강아지, " + age + "살)가 등록되었습니다.");
-                    Dog dog = new Dog(name, age, 0, 0);
-                    animals.add(dog);
-                }
-                else if(type == 2) {
-                    System.out.print(name + "고양이, " + age + "살)가 등록되었습니다.");
-                    Cat cat = new Cat(name, age, 0, 0);
-                    animals.add(cat);
-                }
-                else {
-                    throw new IllegalArgumentException("1, 2만 입력 가능합니다.");
-                }
-                break;
-            }catch (InputMismatchException e){
-                System.out.println("숫자가 아닙니다. 다시 입력해주세요.");
-            }catch (IllegalArgumentException e){
-                System.out.println(e.getMessage());
-            }
+        else{
+            System.out.print(name + " (고양이, " + age + "살)가 등록되었습니다.");
+            Cat cat = new Cat(name, age, 0, 0);
+            animals.add(cat);
         }
-
     }
 
     public void feedAnimal(Scanner sc){
@@ -264,7 +244,28 @@ abstract class Animal{
     abstract String makeSound();
 }
 
-class Dog extends Animal{
+abstract class Mammal extends Animal{
+
+    Mammal(String name, int age, int hunger, int happiness) {
+        super(name, age, hunger, happiness);
+    }
+}
+
+abstract class Bird extends Animal{
+
+    Bird(String name, int age, int hunger, int happiness) {
+        super(name, age, hunger, happiness);
+    }
+}
+
+abstract class Reptile extends Animal{
+
+    Reptile(String name, int age, int hunger, int happiness) {
+        super(name, age, hunger, happiness);
+    }
+}
+
+class Dog extends Mammal{
     Dog(String name, int age, int hunger, int happiness){
         super(name, age, hunger, happiness);
     }
@@ -275,7 +276,7 @@ class Dog extends Animal{
     }
 }
 
-class Cat extends Animal{
+class Cat extends Mammal{
     Cat(String name, int age, int hunger, int happiness){
         super(name, age, hunger, happiness);
     }
@@ -283,5 +284,77 @@ class Cat extends Animal{
     @Override
     public String makeSound(){
         return "야옹";
+    }
+}
+
+class Eagle extends Bird{
+
+    Eagle(String name, int age, int hunger, int happiness){
+        super(name, age, hunger, happiness);
+    }
+
+    @Override
+    String makeSound() {
+        return "깍깍";
+    }
+}
+
+class Penguin extends Bird{
+
+    Penguin(String name, int age, int hunger, int happiness){
+        super(name, age, hunger, happiness);
+    }
+
+    @Override
+    String makeSound(){
+        return "꺅꺅";
+    }
+}
+
+class Lion extends Mammal{
+
+    Lion(String name, int age, int hunger, int happiness){
+        super(name, age, hunger, happiness);
+    }
+
+    @Override
+    String makeSound(){
+        return "으르렁";
+    }
+}
+
+class Elephant extends Mammal{
+
+    Elephant(String name, int age, int hunger, int happiness){
+        super(name, age, hunger, happiness);
+    }
+
+    @Override
+    String makeSound(){
+        return "뿌우";
+    }
+}
+
+class Snake extends Reptile{
+
+    Snake(String name, int age, int hunger, int happiness){
+        super(name, age, hunger, happiness);
+    }
+
+    @Override
+    String makeSound(){
+        return "쉬익";
+    }
+}
+
+class Turtle extends Mammal{
+
+    Turtle(String name, int age, int hunger, int happiness){
+        super(name, age, hunger, happiness);
+    }
+
+    @Override
+    String makeSound(){
+        return "없음";
     }
 }
