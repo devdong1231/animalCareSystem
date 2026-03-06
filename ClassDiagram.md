@@ -1,15 +1,17 @@
 ```mermaid
 classDiagram
     class Main{
-        +showMenu() void
+        +showMenu(Scanner) int
     }
     
     class Zoo{
         -List<Animal> animals
-        +showAnimals() List<Animal>
-        +addAnimal(Animal) void
-        +feedAnimal(Animal) void
-        +playAnimal(Animal) void
+        +Zoo()
+        +showAnimals() void
+        +addAnimal(Scanner) void
+        +feedAnimal(Scanner) void
+        +playAnimal(Scanner) void
+        +checkStatus(Scanner) void
     }
     
     class Animal{
@@ -19,7 +21,6 @@ classDiagram
         -int hunger
         -int happiness
         +Animal(String name, int age, int hunger, int happiness)
-        +getStatus() String
         +feed() void
         +play() void
         +makeSound()* String
