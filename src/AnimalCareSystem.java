@@ -74,9 +74,15 @@ public class AnimalCareSystem {
 
 class Zoo{
     private List<Animal> animals;
+    private List<ZooKeeper> keepers;
 
     public Zoo(){
         animals = new ArrayList<>();
+    }
+
+    public void addKeeper(Scanner sc){
+        System.out.print("사육사 이름을 입력하세요: ");
+        String name = sc.next();
     }
 
     public void showAnimals(){
@@ -101,12 +107,12 @@ class Zoo{
 
         if(type == 1){
             System.out.print(name + " (강아지, " + age + "살)가 등록되었습니다.");
-            Dog dog = new Dog(name, age, 0, 0);
+            Dog dog = new Dog(name, age);
             animals.add(dog);
         }
         else{
             System.out.print(name + " (고양이, " + age + "살)가 등록되었습니다.");
-            Cat cat = new Cat(name, age, 0, 0);
+            Cat cat = new Cat(name, age);
             animals.add(cat);
         }
     }
@@ -216,17 +222,43 @@ class Zoo{
     }
 }
 
+class ZooKeeper{
+    private String name;
+    private String major;
+
+    ZooKeeper(String name, String major){
+        this.name = name;
+        this.major = major;
+    }
+
+    public void getStatus(){
+        System.out.println("이름: " + this.name + " 전문분야: " + major);
+    }
+}
+
+enum Food{
+    MEAT, FISH, PLANT, NUTS
+}
+
+interface Flyable{
+    void fly();
+}
+
+interface Swimmable{
+    void swim();
+}
+
 abstract class Animal{
     protected String name;
     protected int age;
     protected int hunger;
     protected int happiness;
 
-    Animal(String name, int age, int hunger, int happiness){
+    Animal(String name, int age){
         this.name = name;
         this.age = age;
-        this.hunger = hunger;
-        this.happiness = happiness;
+        this.hunger = 0;
+        this.happiness = 0;
     }
 
     public void getStatus(){
@@ -246,28 +278,28 @@ abstract class Animal{
 
 abstract class Mammal extends Animal{
 
-    Mammal(String name, int age, int hunger, int happiness) {
-        super(name, age, hunger, happiness);
+    Mammal(String name, int age) {
+        super(name, age);
     }
 }
 
 abstract class Bird extends Animal{
 
-    Bird(String name, int age, int hunger, int happiness) {
-        super(name, age, hunger, happiness);
+    Bird(String name, int age) {
+        super(name, age);
     }
 }
 
 abstract class Reptile extends Animal{
 
-    Reptile(String name, int age, int hunger, int happiness) {
-        super(name, age, hunger, happiness);
+    Reptile(String name, int age) {
+        super(name, age);
     }
 }
 
 class Dog extends Mammal{
-    Dog(String name, int age, int hunger, int happiness){
-        super(name, age, hunger, happiness);
+    Dog(String name, int age){
+        super(name, age);
     }
 
     @Override
@@ -277,8 +309,8 @@ class Dog extends Mammal{
 }
 
 class Cat extends Mammal{
-    Cat(String name, int age, int hunger, int happiness){
-        super(name, age, hunger, happiness);
+    Cat(String name, int age){
+        super(name, age);
     }
 
     @Override
@@ -289,8 +321,8 @@ class Cat extends Mammal{
 
 class Eagle extends Bird{
 
-    Eagle(String name, int age, int hunger, int happiness){
-        super(name, age, hunger, happiness);
+    Eagle(String name, int age){
+        super(name, age);
     }
 
     @Override
@@ -301,8 +333,8 @@ class Eagle extends Bird{
 
 class Penguin extends Bird{
 
-    Penguin(String name, int age, int hunger, int happiness){
-        super(name, age, hunger, happiness);
+    Penguin(String name, int age){
+        super(name, age);
     }
 
     @Override
@@ -313,8 +345,8 @@ class Penguin extends Bird{
 
 class Lion extends Mammal{
 
-    Lion(String name, int age, int hunger, int happiness){
-        super(name, age, hunger, happiness);
+    Lion(String name, int age){
+        super(name, age);
     }
 
     @Override
@@ -325,8 +357,8 @@ class Lion extends Mammal{
 
 class Elephant extends Mammal{
 
-    Elephant(String name, int age, int hunger, int happiness){
-        super(name, age, hunger, happiness);
+    Elephant(String name, int age){
+        super(name, age);
     }
 
     @Override
@@ -337,8 +369,8 @@ class Elephant extends Mammal{
 
 class Snake extends Reptile{
 
-    Snake(String name, int age, int hunger, int happiness){
-        super(name, age, hunger, happiness);
+    Snake(String name, int age){
+        super(name, age);
     }
 
     @Override
@@ -349,8 +381,8 @@ class Snake extends Reptile{
 
 class Turtle extends Mammal{
 
-    Turtle(String name, int age, int hunger, int happiness){
-        super(name, age, hunger, happiness);
+    Turtle(String name, int age){
+        super(name, age);
     }
 
     @Override
